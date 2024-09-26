@@ -16,7 +16,57 @@ $ ./create_cluster.sh
 $ ./setup_openunison.sh
 ```
 
-add port forwarding for ports 443, 10444, 10445.  Make public and https.
+#### Make Port 443 Public
+
+First, click on ***PORTS*** to the right of your terminal tab:
+
+![PORTS tab](./docs/imgs/ports.png "PORTS tab")
+
+Next, right click on ***443*** and choose ***Port Visibility*** --> ***Public***
+
+![Make 443 public](./docs/imgs/make-443-public.png "Make Port 443 Public")
+
+#### Make Port 10444 and port 10445 HTTPS and Public
+
+Next, make port 10444 **HTTPS** by right clicking on port 10444 and choosing ***Change Port Protocol*** --> ***HTTPS***
+![Make 10444 HTTPS](./docs/imgs/make-10444-https.png "Make Port 10444 HTTPS")
+
+The next step is to make port 10444 public.  Right click on port 10444 and choose ***Port Visibility*** --> ***Public***
+
+![Make 10444 public](./docs/imgs/make-10444-public.png "Make Port 10444 Public")
+
+Once port 10444 is made public, repeat these same steps on port 104445.
+
+#### Access OpenUnison and the Kubernetes Dashboard
+
+Once all three ports are public and HTTPS, you can login to OpenUnison by copying the URL of port 443 by right clicking on the port and selecting ***Copy Address***.  You can open this address in a browser.  You'll be presented with a login screen.  Use the username `mmosley` and the password `start123`:
+
+![OpenUnison Login](./docs/imgs/openunison-login.png "OpenUnison Login").
+
+Once you're logged in, in the middle of the screen click on ***vCluster Control Plane*** and then the ***Kubernetes Dashboard*** badge.  This will let you easily monitor pods as they run.  You can also click on the ***Kubernetes Tokens*** badge to get a generated kubectl to access your cluster locally.  ***NOTE:*** Because of how GitHub spaces works, neither port forwarding nor exec will work locally.
+
+![OpenUnison Portal](./docs/imgs/openunison-portal.png "OpenUnison Portal").
+
+#### Verify Setup before AKEYLESS Integration
+
+The final step before integrating AKEYLESS is to verify that your port 443 is publicly available.  Copy the 443 URL as before and from a local terminal, run curl adding `/auth/idp/k8sIdp/.well-known/openid-configuration`.  As an example:
+
+```sh
+$ curl https://fuzzy-doodle-9r7w9gjxvv2jg7-443.app.github.dev/auth/idp/k8sIdp/.well-known/openid-configuration
+{
+  "issuer": "https://fuzzy-doodle-9r7w9gjxvv2jg7-443.app.github.dev/auth/idp/k8sIdp",
+  "authorization_endpoint": "https://fuzzy-doodle-9r7w9gjxvv2jg7-443.app.github.dev/auth/idp/k8sIdp/auth",
+  "token_endpoint": "https://fuzzy-doodle-9r7w9gjxvv2jg7-443.app.github.dev/auth/idp/k8sIdp/token",
+  "userinfo_endpoint": "https://fuzzy-doodle-9r7w9gjxvv2jg7-443.app.github.dev/auth/idp/k8sIdp/userinfo",
+  "revocation_endpoint": "https://fuzzy-doodle-9r7w9gjxvv2jg7-443.app.github.dev/auth/idp/k8sIdp/revoke",
+  "jwks_uri": "https://fuzzy-doodle-9r7w9gjxvv2jg7-443.app.github.dev/auth/idp/k8sIdp/certs",
+  "response_types_supported": [
+.
+.
+.
+```
+
+If you don't get any output, this means that your port 443 is not setup correctly.  Please go back make port 443 public.
 
 ### Integrate akeyless
 
