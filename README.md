@@ -70,7 +70,7 @@ If you don't get any output, this means that your port 443 is not setup correctl
 
 ### Integrate akeyless
 
-Create initia-admin user:
+#### Create initia-admin user
 
 1. User & Auth Methods
 2. New
@@ -78,14 +78,14 @@ Create initia-admin user:
 4. Name: init-admin, Click "Finish"
 5. copy access id and access key
 
-Add init-admin to admin role:
+#### Add init-admin to admin role:
 
 1. Access Roles
 2. admin
 3. Associate
 4. Choose /init-admin for Auth Method
 
-Setup akeyless
+#### Setup akeyless
 
 ```bash
 $ akeyless
@@ -114,7 +114,7 @@ Would you like to move 'akeyless' binary to: /home/codespace/.akeyless/bin/akeyl
 Please type your answer: n
 ```
 
-Setup SSO with akeyless
+#### Setup SSO with akeyless
 
 ```bash
 $ cd scripts
@@ -123,14 +123,20 @@ $ ./setup_akeyless_sso.sh
 
 ***If you see the error `failed to create auth method: Desc: auth method creation failed, Error: Desc: Failed to create auth method. Status 400 Bad Request, Error: InvalidParam. Message: account id: acc-eml1vex0l1Tm, access id: p-vbkes1ww9i6uam. Desc: Failed to create access. Status 400 Bad Request, Error: InvalidAccessParams. Message: failed to load provider issuer`, the 443 port forwarder is not set to public***
 
-Setup Gateway
+Once SSO is setup, you can login to OpenUnison using the user `mmosley` and the password `start123`.  Then you can click on the AKEYLESS badge:
+
+![AKEYLESS SSO](./docs/imgs/akeyless-sso.png "AKEYLESS SSO")
+
+#### Setup Gateway
 
 ```bash
 $ cd scripts
 $ ./setup_akeyless_gateway.sh
 ```
 
-Add port 10446 to portforward.  Change to HTTPS, public.
+Follow the same process for port 10446 as you did for 10444 and 10445 above to make it both HTTPS and public.
+
+
 
 ```bash
 Every 2.0s: kubectl get pods -n akeyless                                                                                                                                                                                                                                                                                                                                                                                 codespaces-9076fc: Tue Sep 10 14:21:16 2024
@@ -152,3 +158,37 @@ Setup Kubernetes Authentication
 $ cd scripts
 $ ./setup_k8s_auth_cp.sh
 ```
+
+Wait for the gateways to start running again
+
+```bash
+Every 2.0s: kubectl get pods -n akeyless                                                                                                                                                                                                                                                                                                                                                                                 codespaces-9076fc: Tue Sep 10 14:21:16 2024
+
+NAME                                      READY   STATUS    RESTARTS   AGE
+gw-akeyless-api-gateway-7c8bcdb55-7wdxs   0/1     Running   0          2m
+gw-akeyless-api-gateway-7c8bcdb55-z96bv   0/1     Running   0          2m
+```
+
+Once the gateways are both at 1/1 again, login to OpenUnison with the user `mmosley` and the password `start123`.  You can click on the ***AKEYLESS Gateway*** badge to access the local version of your AKEYLESS configuration dashboard:
+
+![AKEYLESS Gateway](./docs/imgs/akeyless-gateway.png "AKEYLESS Gateway")
+
+### Deploying a Tenant
+
+With OpenUnison and AKEYLESS integrated, the next step is to request a new tenant.  Login to OpenUnison with the username `mmosley` and the password `start123`.  Click on the ***New Kubernetes Namespace*** badge.
+
+![New Kubernetes Namespace](./docs/imgs/newns1.png "New Kubernetes Namespace")
+
+Fill out the form as seen in the screenshot with the below values:
+
+| Option | Value |
+| ------ | ----- |
+| Cluster | vCluster Control Plane |
+| Namespace Name | tenant1 |
+| Dashboard Port | 11444 |
+| API Server Port | 11445 |
+| Administrators Group | cn=k8s-cluster-admins,ou=Groups,DC=domain,DC=com |
+| Viewer Group | cn=vcluster-test-view,ou=Groups,DC=domain,DC=com |
+| Reason | Demp |
+
+![New Kubernetes Namespace](./docs/imgs/newns2.png "New Kubernetes Namespace")

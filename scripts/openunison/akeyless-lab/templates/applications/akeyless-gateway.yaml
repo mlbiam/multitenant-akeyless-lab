@@ -164,6 +164,39 @@ spec:
         javaScript: |-
           
           GlobalEntries = Java.type("com.tremolosecurity.server.GlobalEntries");
+
+          function initFilter(config) {
+
+          }
+
+          function doFilter(request,response,chain) {
+            uriParams = request.getAttribute("TREMOLO_URI_PARAMS");
+            currentUri = uriParams.get("fullURI");
+            if (currentUri.startsWith("/gw")) {
+              currentUri = currentUri.substring(3);
+            }
+
+            uriParams.put("localURI",currentUri);
+            chain.nextFilter(request,response,chain);
+          }
+    hosts:
+    - '{{ .Values.akeyless_gw_host }}'
+    
+    results:
+      auFail: default-login-failure
+      azFail: default-login-failure
+    uri: /v2
+    proxyTo: http://gw-akeyless-api-gateway.akeyless.svc:8081${localURI}
+    authChain: anon
+  - azRules:
+    - constraint: o=Tremolo
+      scope: dn
+    filterChain:
+    - className: com.tremolosecurity.proxy.filters.JavaScriptFilter
+      params:
+        javaScript: |-
+          
+          GlobalEntries = Java.type("com.tremolosecurity.server.GlobalEntries");
           System = Java.type("java.lang.System");
 
           function initFilter(config) {

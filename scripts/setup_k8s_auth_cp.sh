@@ -2,6 +2,12 @@
 
 K8S_CP_AUTH=$(akeyless auth-method create k8s -n k8s-cp --json)
 
+if [ -z "${K8S_CP_AUTH}" ]; then
+    echo "Unable to create kube auth, cancelling"
+    exit 1
+fi
+
+
 ACCESS_ID=$(echo $K8S_CP_AUTH | jq -r '.access_id')
 PRIV_KEY=$(echo $K8S_CP_AUTH | jq -r '.prv_key')
 
