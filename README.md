@@ -70,48 +70,40 @@ If you don't get any output, this means that your port 443 is not setup correctl
 
 ### Integrate akeyless
 
-#### Create initia-admin user
+Login to akeylesss as an administrator.  In the upper right hand corner, click on your face/user settings.  There's an option for ***Copy Token***.  Click on it.  This will copy the token to your clipboard.  
 
-1. User & Auth Methods
-2. New
-3. API Key
-4. Name: init-admin, Click "Finish"
-5. copy access id and access key
+![AKEYLESS Token](./docs/imgs/akeyless-token.png "AKEYLESS Token")
 
-#### Add init-admin to admin role:
-
-1. Access Roles
-2. admin
-3. Associate
-4. Choose /init-admin for Auth Method
-
-#### Setup akeyless
+Next, run `scripts/init-akeyless.sh`.  When prompted for a token, paste it
 
 ```bash
-$ akeyless
+$ cd scripts
+$ ./initialze-akeyless.sh 
+--2024-09-27 17:52:39--  https://github.com/charmbracelet/gum/releases/download/v0.14.5/gum_0.14.5_amd64.deb
+Resolving github.com (github.com)... 140.82.112.4
+Connecting to github.com (github.com)|140.82.112.4|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://objects.githubusercontent.com/github-production-release-asset-2e65be/502193049/119b7537-5bce-4aa3-9f64-bcfbf259edef?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20240927%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240927T175207Z&X-Amz-Expires=300&X-Amz-Signature=230ac288dc180fd5edf233c2a61484407699c6cabda334a7e04c644c198794c0&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dgum_0.14.5_amd64.deb&response-content-type=application%2Foctet-stream [following]
+--2024-09-27 17:52:39--  https://objects.githubusercontent.com/github-production-release-asset-2e65be/502193049/119b7537-5bce-4aa3-9f64-bcfbf259edef?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20240927%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240927T175207Z&X-Amz-Expires=300&X-Amz-Signature=230ac288dc180fd5edf233c2a61484407699c6cabda334a7e04c644c198794c0&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dgum_0.14.5_amd64.deb&response-content-type=application%2Foctet-stream
+Resolving objects.githubusercontent.com (objects.githubusercontent.com)... 185.199.109.133, 185.199.110.133, 185.199.108.133, ...
+Connecting to objects.githubusercontent.com (objects.githubusercontent.com)|185.199.109.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 4488424 (4.3M) [application/octet-stream]
+Saving to: ‘/tmp/gum_0.14.5_amd64.deb.22’
+
+gum_0.14.5_amd64.deb.22                                                                                                     100%[=========================================================================================================================================================================================================================================================================================================================================>]   4.28M  --.-KB/s    in 0.05s   
+
+2024-09-27 17:52:39 (86.1 MB/s) - ‘/tmp/gum_0.14.5_amd64.deb.22’ saved [4488424/4488424]
+
+(Reading database ... 70128 files and directories currently installed.)
+Preparing to unpack /tmp/gum_0.14.5_amd64.deb ...
+Unpacking gum (0.14.5) over (0.14.5) ...
+Setting up gum (0.14.5) ...
+Processing triggers for man-db (2.9.1-1) ...
 AKEYLESS-CLI, first use detected
 For more info please visit: https://docs.akeyless.io/docs/cli
-Enter Akeyless URL (Default: vault.akeyless.io) 
-Would you like to configure a profile? (Y/n) Y
-Profile Name:  (Default: default) 
-Access Type (enter for access_key): 
-  1) access_key 
-  2) aws_iam 
-  3) azure_ad 
-  4) saml 
-  5) ldap
-  6) email/password
-  7) oidc
-  8) k8s
-  9) gcp
-  10) certificate
-  11) oci
- 1
-Access ID:  p-************
-Access Key:  ********************************************
-The profile: default was successfully configured
-Would you like to move 'akeyless' binary to: /home/codespace/.akeyless/bin/akeyless? (Y/n)
-Please type your answer: n
+Version: 1.112.0.958540b
+Association ass-mvqh220h02wegdgp7991 was successfully created
 ```
 
 #### Setup SSO with akeyless
